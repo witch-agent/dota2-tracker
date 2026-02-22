@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dota 2 Tracker | Player Stats</title>
+    <title>Dota 2 Tracker | Stats + Lifestyle</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0a0c;
-            --bg-secondary: #141418;
-            --bg-tertiary: #1c1c22;
-            --text: #f0f0f0;
-            --text-secondary: #a0a0a0;
-            --text-muted: #606060;
-            --accent: #ed2e42;
-            --accent-glow: rgba(237, 46, 66, 0.15);
-            --border: #2a2a32;
-            --success: #00ff88;
-            --danger: #ff3366;
+            --bg: #0D0D0D;
+            --surface: #1A1C1E;
+            --surface-hover: #242628;
+            --text: #FFFFFF;
+            --text-secondary: #888888;
+            --accent: #C8FF00;
+            --accent-dim: rgba(200, 255, 0, 0.15);
+            --border: rgba(255,255,255,0.08);
+            --success: #00FF88;
+            --danger: #FF3366;
+            --warning: #FFB000;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,94 +29,266 @@
             color: var(--text);
             font-family: 'Inter', system-ui, sans-serif;
             min-height: 100vh;
-            line-height: 1.6;
+            line-height: 1.5;
+            padding-bottom: 80px;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 480px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1.5rem;
         }
         
         /* Header */
         header {
-            text-align: center;
-            padding: 3rem 0;
+            margin-bottom: 2rem;
         }
         
-        .logo {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--accent);
-            letter-spacing: 0.15em;
+        .date-line {
+            font-size: 0.7rem;
             text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-        
-        h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        h1 span { color: var(--accent); }
-        
-        .subtitle {
+            letter-spacing: 0.15em;
             color: var(--text-secondary);
-            font-size: 1rem;
+            margin-bottom: 0.5rem;
         }
         
-        /* Search */
-        .search-box {
-            background: var(--bg-secondary);
+        .greeting {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .player-name {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Health Score Ring */
+        .score-card {
+            background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 16px;
             padding: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .score-ring {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent) 0deg, var(--accent) calc(var(--score) * 3.6deg), var(--surface-hover) calc(var(--score) * 3.6deg));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .score-ring::before {
+            content: '';
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            background: var(--surface);
+            border-radius: 50%;
+        }
+        
+        .score-value {
+            position: relative;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .score-info h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .score-info p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Vitals Row */
+        .vitals-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .vital-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .vital-icon {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .vital-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .vital-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+        }
+        
+        /* Section Header */
+        .section-header {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text);
+            margin: 1.5rem 0 1rem;
+        }
+        
+        /* Progress Card */
+        .progress-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .progress-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .progress-value {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .progress-track {
+            height: 8px;
+            background: var(--surface-hover);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Hydration */
+        .hydration-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .hydration-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .hydration-glasses {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .glass {
+            width: 32px;
+            height: 40px;
+            border: 2px solid var(--border);
+            border-radius: 4px 4px 8px 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .glass.filled {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .glass:hover {
+            border-color: var(--accent);
+        }
+        
+        /* Add Button */
+        .add-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent);
+            border: none;
+            border-radius: 14px;
+            color: var(--bg);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.75rem;
+        }
+        
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px var(--accent-dim);
+        }
+        
+        /* Search Box */
+        .search-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1rem;
+            margin-bottom: 1rem;
         }
         
         .search-input {
             width: 100%;
-            padding: 1rem 1.25rem;
+            padding: 0.75rem 1rem;
             background: var(--bg);
             border: 1px solid var(--border);
             border-radius: 10px;
             color: var(--text);
-            font-size: 1rem;
-            transition: all 0.2s;
+            font-size: 0.9rem;
         }
         
         .search-input:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-glow);
         }
         
         .search-btn {
             width: 100%;
-            margin-top: 1rem;
-            padding: 1rem;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
             background: var(--accent);
             border: none;
             border-radius: 10px;
-            color: white;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1rem;
+            color: var(--bg);
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px var(--accent-glow);
-        }
-        
-        .search-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
         }
         
         /* Player Profile */
@@ -126,160 +298,79 @@
         
         .player-profile.show {
             display: block;
-            animation: fadeIn 0.5s ease;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .profile-header {
+        .player-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.25rem;
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 16px;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
         
         .avatar {
-            width: 80px;
-            height: 80px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
-            border: 3px solid var(--accent);
-            object-fit: cover;
+            border: 2px solid var(--accent);
         }
         
         .player-info h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+            font-weight: 600;
         }
         
-        .player-id {
-            font-family: 'JetBrains Mono', monospace;
+        .player-info .mmr {
             font-size: 0.85rem;
-            color: var(--text-muted);
+            color: var(--accent);
         }
         
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1rem;
         }
         
-        .stat-card {
-            background: var(--bg-secondary);
+        .stat-box {
+            background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.25rem;
+            border-radius: 14px;
+            padding: 1rem;
             text-align: center;
         }
         
-        .stat-value {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
+        .stat-box .value {
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--accent);
         }
         
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-        }
-        
-        .stat-card.winrate .stat-value { color: var(--success); }
-        .stat-card.wins .stat-value { color: var(--success); }
-        .stat-card.losses .stat-value { color: var(--danger); }
-        
-        /* Matches */
-        .matches-section h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .match-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .match-result {
-            width: 60px;
-            height: 36px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        
-        .match-result.win {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--success);
-        }
-        
-        .match-result.loss {
-            background: rgba(255, 51, 102, 0.15);
-            color: var(--danger);
-        }
-        
-        .match-info {
-            flex: 1;
-        }
-        
-        .match-hero {
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .hero-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 4px;
-        }
-        
-        .match-kda {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
+        .stat-box .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             color: var(--text-secondary);
         }
         
-        .match-duration {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
+        .stat-box.wins .value { color: var(--success); }
+        .stat-box.losses .value { color: var(--danger); }
         
         /* Loading */
         .loading {
             display: none;
             text-align: center;
-            padding: 3rem;
+            padding: 2rem;
         }
         
         .loading.show { display: block; }
         
         .spinner {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border: 3px solid var(--border);
             border-top-color: var(--accent);
             border-radius: 50%;
@@ -287,235 +378,309 @@
             margin: 0 auto 1rem;
         }
         
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.75rem 0;
+            z-index: 100;
         }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.65rem;
+            cursor: pointer;
+        }
+        
+        .nav-item.active {
+            color: var(--accent);
+        }
+        
+        .nav-icon {
+            font-size: 1.25rem;
+        }
+        
+        /* Views */
+        .view { display: none; }
+        .view.active { display: block; }
         
         /* Error */
         .error {
             display: none;
-            background: rgba(255, 51, 102, 0.1);
+            background: rgba(255,51,102,0.1);
             border: 1px solid var(--danger);
-            border-radius: 12px;
-            padding: 1.5rem;
+            border-radius: 14px;
+            padding: 1rem;
             text-align: center;
             color: var(--danger);
+            margin-bottom: 1rem;
         }
         
         .error.show { display: block; }
-        
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 3rem 0;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-        
-        footer a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-        
-        @media (max-width: 600px) {
-            .container { padding: 1rem; }
-            .profile-header { flex-direction: column; text-align: center; }
-            .match-card { flex-wrap: wrap; }
-        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <header>
-            <div class="logo">Dota 2 Tracker</div>
-            <h1>Find <span>Player</span> Stats</h1>
-            <p class="subtitle">Search by Steam ID or nickname</p>
+            <div class="date-line" id="dateLine">MONDAY, FEB 22</div>
+            <h1 class="greeting">Good Evening</h1>
+            <p class="player-name" id="playerName">Search for your Steam profile</p>
         </header>
         
-        <div class="search-box">
-            <input type="text" class="search-input" id="searchInput" placeholder="Enter Steam ID or nickname...">
-            <button class="search-btn" onclick="searchPlayer()">Search Player</button>
-        </div>
-        
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Searching player...</p>
-        </div>
-        
-        <div class="error" id="error">
-            <p>Player not found. Please check the ID.</p>
-        </div>
-        
-        <div class="player-profile" id="profile">
-            <div class="profile-header">
-                <img src="" alt="Avatar" class="avatar" id="avatar">
-                <div class="player-info">
-                    <h2 id="playerName">Player Name</h2>
-                    <p class="player-id">ID: <span id="playerId">12345678</span></p>
+        <!-- View: Lifestyle -->
+        <div class="view active" id="viewLifestyle">
+            <!-- Health Score -->
+            <div class="score-card">
+                <div class="score-ring" style="--score: 72">
+                    <span class="score-value" id="healthScore">72</span>
+                </div>
+                <div class="score-info">
+                    <h3>Player Score</h3>
+                    <p>Based on gaming habits</p>
                 </div>
             </div>
             
-            <div class="stats-grid">
-                <div class="stat-card wins">
-                    <div class="stat-value" id="wins">0</div>
-                    <div class="stat-label">Wins</div>
+            <!-- Vitals -->
+            <div class="vitals-row">
+                <div class="vital-card">
+                    <div class="vital-icon">🎮</div>
+                    <div class="vital-value" id="gamesPlayed">0</div>
+                    <div class="vital-label">Matches</div>
                 </div>
-                <div class="stat-card losses">
-                    <div class="stat-value" id="losses">0</div>
-                    <div class="stat-label">Losses</div>
+                <div class="vital-card">
+                    <div class="vital-icon">⏱️</div>
+                    <div class="vital-value" id="playTime">0h</div>
+                    <div class="vital-label">Play Time</div>
                 </div>
-                <div class="stat-card winrate">
-                    <div class="stat-value" id="winRate">0%</div>
-                    <div class="stat-label">Win Rate</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="matches">0</div>
-                    <div class="stat-label">Total Matches</div>
+                <div class="vital-card">
+                    <div class="vital-icon">🎯</div>
+                    <div class="vital-value" id="winRate">0%</div>
+                    <div class="vital-label">Win Rate</div>
                 </div>
             </div>
             
-            <div class="matches-section">
-                <h3>Recent Matches</h3>
-                <div id="matchesList"></div>
+            <div class="section-header">GAMING METRICS</div>
+            
+            <!-- Match Progress -->
+            <div class="progress-card">
+                <div class="progress-header">
+                    <span class="progress-title">Daily Matches Goal</span>
+                    <span class="progress-value"><span id="matchesToday">0</span>/5</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="matchesProgress" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <!-- Break Reminder -->
+            <div class="progress-card">
+                <div class="progress-header">
+                    <span class="progress-title">Break Timer</span>
+                    <span class="progress-value" id="breakTime">45m</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="breakProgress" style="width: 75%"></div>
+                </div>
+            </div>
+            
+            <div class="section-header">WELLNESS</div>
+            
+            <!-- Hydration -->
+            <div class="hydration-card">
+                <div class="hydration-header">
+                    <span class="progress-title">💧 Hydration</span>
+                    <span class="progress-value"><span id="waterCount">0</span>/8</span>
+                </div>
+                <div class="hydration-glasses" id="waterGlasses">
+                    <div class="glass" onclick="addWater(0)"></div>
+                    <div class="glass" onclick="addWater(1)"></div>
+                    <div class="glass" onclick="addWater(2)"></div>
+                    <div class="glass" onclick="addWater(3)"></div>
+                    <div class="glass" onclick="addWater(4)"></div>
+                    <div class="glass" onclick="addWater(5)"></div>
+                    <div class="glass" onclick="addWater(6)"></div>
+                    <div class="glass" onclick="addWater(7)"></div>
+                </div>
+            </div>
+            
+            <!-- Sleep -->
+            <div class="progress-card">
+                <div class="progress-header">
+                    <span class="progress-title">😴 Sleep Goal</span>
+                    <span class="progress-value">6/8h</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: 75%"></div>
+                </div>
             </div>
         </div>
         
-        <footer>
-            Data from <a href="https://www.opendota.com" target="_blank">OpenDota API</a>
-        </footer>
+        <!-- View: Player Search -->
+        <div class="view" id="viewPlayer">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Enter Steam ID or nickname...">
+                <button class="search-btn" onclick="searchPlayer()">Search</button>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Searching...</p>
+            </div>
+            
+            <div class="error" id="error">Player not found</div>
+            
+            <div class="player-profile" id="profile">
+                <div class="player-card">
+                    <img src="" alt="Avatar" class="avatar" id="avatar">
+                    <div class="player-info">
+                        <h2 id="playerName2">Player</h2>
+                        <span class="mmr" id="mmr">MMR: --</span>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-box wins">
+                        <div class="value" id="wins">0</div>
+                        <div class="label">Wins</div>
+                    </div>
+                    <div class="stat-box losses">
+                        <div class="value" id="losses">0</div>
+                        <div class="label">Losses</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- View: Heroes -->
+        <div class="view" id="viewHeroes">
+            <div class="section-header">HERO MASTERY</div>
+            <div class="progress-card">
+                <div class="progress-header">
+                    <span class="progress-title">🎯 Top Heroes</span>
+                    <span class="progress-value">Coming soon</span>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.85rem;">Track your most played heroes and win rates</p>
+            </div>
+        </div>
+        
+        <!-- View: Settings -->
+        <div class="view" id="viewSettings">
+            <div class="section-header">SETTINGS</div>
+            <div class="progress-card">
+                <div class="progress-header">
+                    <span class="progress-title">Daily Match Goal</span>
+                    <span class="progress-value">5</span>
+                </div>
+            </div>
+            <div class="progress-card">
+                <div class="progress-header">
+                    <span class="progress-title">Break Reminder</span>
+                    <span class="progress-value">45 min</span>
+                </div>
+            </div>
+        </div>
     </div>
+    
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('lifestyle')">
+            <span class="nav-icon">🏠</span>
+            <span>Lifestyle</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('player')">
+            <span class="nav-icon">🔍</span>
+            <span>Player</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('heroes')">
+            <span class="nav-icon">⚔️</span>
+            <span>Heroes</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('settings')">
+            <span class="nav-icon">⚙️</span>
+            <span>Settings</span>
+        </div>
+    </nav>
 
     <script>
-        const API_BASE = 'https://api.opendota.com/api';
+        // Set date
+        const now = new Date();
+        const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+        const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+        document.getElementById('dateLine').textContent = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
         
-        // Hero database (common heroes)
-        const heroes = {
-            1: { name: 'Anti-Mage', icon: 'https://api.opendota.com/apps/dota2/images/heroes/anti-mage_icon.png' },
-            2: { name: 'Axe', icon: 'https://api.opendota.com/apps/dota2/images/heroes/axe_icon.png' },
-            3: { name: 'Bane', icon: 'https://api.opendota.com/apps/dota2/images/heroes/bane_icon.png' },
-            4: { name: 'Bloodseeker', icon: 'https://api.opendota.com/apps/dota2/images/heroes/bloodseeker_icon.png' },
-            5: { name: 'Crystal Maiden', icon: 'https://api.opendota.com/apps/dota2/images/heroes/crystal_maiden_icon.png' },
-            6: { name: 'Drow Ranger', icon: 'https://api.opendota.com/apps/dota2/images/heroes/drow_ranger_icon.png' },
-            7: { name: 'Earthshaker', icon: 'https://api.opendota.com/apps/dota2/images/heroes/earthshaker_icon.png' },
-            8: { name: 'Juggernaut', icon: 'https://api.opendota.com/apps/dota2/images/heroes/juggernaut_icon.png' },
-            9: { name: 'Mirana', icon: 'https://api.opendota.com/apps/dota2/images/heroes/mirana_icon.png' },
-            10: { name: 'Morphling', icon: 'https://api.opendota.com/apps/dota2/images/heroes/morphling_icon.png' },
-            11: { name: 'Shadow Fiend', icon: 'https://api.opendota.com/apps/dota2/images/heroes/nevermore_icon.png' },
-            12: { name: 'Phantom Lancer', icon: 'https://api.opendota.com/apps/dota2/images/heroes/phantom_lancer_icon.png' },
-            13: { name: 'Puck', icon: 'https://api.opendota.com/apps/dota2/images/heroes/puck_icon.png' },
-            14: { name: 'Pugna', icon: 'https://api.opendota.com/apps/dota2/images/heroes/pugna_icon.png' },
-            15: { name: 'Rattletrap', icon: 'https://api.opendota.com/apps/dota2/images/heroes/rattletrap_icon.png' },
-            16: { name: 'Riki', icon: 'https://api.opendota.com/apps/dota2/images/heroes/riki_icon.png' },
-            17: { name: 'Shadow Shaman', icon: 'https://api.opendota.com/apps/dota2/images/heroes/shadow_shaman_icon.png' },
-            18: { name: 'Slardar', icon: 'https://api.opendota.com/apps/dota2/images/heroes/slardar_icon.png' },
-            19: { name: 'Sven', icon: 'https://api.opendota.com/apps/dota2/images/heroes/sven_icon.png' },
-            20: { name: 'Tiny', icon: 'https://api.opendota.com/apps/dota2/images/heroes/tiny_icon.png' },
-            21: { name: 'Vengeful Spirit', icon: 'https://api.opendota.com/apps/dota2/images/heroes/vengefulspirit_icon.png' },
-            22: { name: 'Windrunner', icon: 'https://api.opendota.com/apps/dota2/images/heroes/windrunner_icon.png' },
-            23: { name: 'Zeus', icon: 'https://api.opendota.com/apps/dota2/images/heroes/zuus_icon.png' },
-            25: { name: 'Skeleton King', icon: 'https://api.opendota.com/apps/dota2/images/heroes/skeleton_king_icon.png' },
-            27: { name: 'Death Prophet', icon: 'https://api.opendota.com/apps/dota2/images/heroes/death_prophet_icon.png' },
-            28: { name: 'Phantom Assassin', icon: 'https://api.opendota.com/apps/dota2/images/heroes/phantom_assassin_icon.png' },
-            29: { name: 'Razor', icon: 'https://api.opendota.com/apps/dota2/images/heroes/razor_icon.png' },
-            30: { name: 'Storm Spirit', icon: 'https://api.opendota.com/apps/dota2/images/heroes/storm_spirit_icon.png' },
-            31: { name: 'Sand King', icon: 'https://api.opendota.com/apps/dota2/images/heroes/sand_king_icon.png' },
-            32: { name: 'Storm Spirit', icon: 'https://api.opendota.com/apps/dota2/images/heroes/storm_spirit_icon.png' },
-            33: { name: 'Nature\'s Prophet', icon: 'https://api.opendota.com/apps/dota2/images/heroes/furion_icon.png' },
-            34: { name: 'Lich', icon: 'https://api.opendota.com/apps/dota2/images/heroes/lich_icon.png' },
-            35: { name: 'Lion', icon: 'https://api.opendota.com/apps/dota2/images/heroes/lion_icon.png' },
-            36: { name: 'Witch Doctor', icon: 'https://api.opendota.com/apps/dota2/images/heroes/witch_doctor_icon.png' },
-            37: { name: 'Riki', icon: 'https://api.opendota.com/apps/dota2/images/heroes/riki_icon.png' },
-            38: { name: 'Enigma', icon: 'https://api.opendota.com/apps/dota2/images/heroes/enigma_icon.png' },
-            39: { name: 'Tidehunter', icon: 'https://api.opendota.com/apps/dota2/images/heroes/tidehunter_icon.png' },
-            40: { name: 'Witch Doctor', icon: 'https://api.opendota.com/apps/dota2/images/heroes/witch_doctor_icon.png' },
-            41: { name: 'Faceless Void', icon: 'https://api.opendota.com/apps/dota2/images/heroes/faceless_void_icon.png' },
-            42: { name: 'Wraith King', icon: 'https://api.opendota.com/apps/dota2/images/heroes/skeleton_king_icon.png' },
-            43: { name: 'Sand King', icon: 'https://api.opendota.com/apps/dota2/images/heroes/sand_king_icon.png' },
-            44: { name: 'Slark', icon: 'https://api.opendota.com/apps/dota2/images/heroes/slark_icon.png' },
-            45: { name: 'Templar Assassin', icon: 'https://api.opendota.com/apps/dota2/images/heroes/templar_assassin_icon.png' },
-            46: { name: 'Bounty Hunter', icon: 'https://api.opendota.com/apps/dota2/images/heroes/bounty_hunter_icon.png' },
-            47: { name: 'Brewmaster', icon: 'https://api.opendota.com/apps/dota2/images/heroes/brewmaster_icon.png' },
-            48: { name: 'Huskar', icon: 'https://api.opendota.com/apps/dota2/images/heroes/huskar_icon.png' },
-            49: { name: 'Night Stalker', icon: 'https://api.opendota.com/apps/dota2/images/heroes/night_stalker_icon.png' },
-            50: { name: 'Sniper', icon: 'https://api.opendota.com/apps/dota2/images/heroes/sniper_icon.png' },
-            51: { name: 'Necrophos', icon: 'https://api.opendota.com/apps/dota2/images/heroes/necrolyte_icon.png' },
-            52: { name: 'Warlock', icon: 'https://api.opendota.com/apps/dota2/images/heroes/warlock_icon.png' },
-            53: { name: 'Beastmaster', icon: 'https://api.opendota.com/apps/dota2/images/heroes/beastmaster_icon.png' },
-            54: { name: 'Queen of Pain', icon: 'https://api.opendota.com/apps/dota2/images/heroes/queenofpain_icon.png' },
-            55: { name: 'Venomancer', icon: 'https://api.opendota.com/apps/dota2/images/heroes/venomancer_icon.png' },
-            56: { name: 'Faceless Void', icon: 'https://api.opendota.com/apps/dota2/images/heroes/faceless_void_icon.png' },
-            57: { name: 'Phantom Lancer', icon: 'https://api.opendota.com/apps/dota2/images/heroes/phantom_lancer_icon.png' },
-            58: { name: 'Troll Warlord', icon: 'https://api.opendota.com/apps/dota2/images/heroes/troll_warlord_icon.png' },
-            59: { name: 'Templar Assassin', icon: 'https://api.opendota.com/apps/dota2/images/heroes/templar_assassin_icon.png' },
-            60: { name: 'Naga Siren', icon: 'https://api.opendota.com/apps/dota2/images/heroes/naga_siren_icon.png' },
-            67: { name: 'Invoker', icon: 'https://api.opendota.com/apps/dota2/images/heroes/invoker_icon.png' },
-            68: { name: 'Silencer', icon: 'https://api.opendota.com/apps/dota2/images/heroes/silencer_icon.png' },
-            69: { name: 'Leshrac', icon: 'https://api.opendota.com/apps/dota2/images/heroes/leshrac_icon.png' },
-            70: { name: 'Dark Seer', icon: 'https://api.opendota.com/apps/dota2/images/heroes/dark_seer_icon.png' },
-            71: { name: 'Clinkz', icon: 'https://api.opendota.com/apps/dota2/images/heroes/clinkz_icon.png' },
-            72: { name: 'Omniknight', icon: 'https://api.opendota.com/apps/dota2/images/heroes/omniknight_icon.png' },
-            73: { name: 'Enchantress', icon: 'https://api.opendota.com/apps/dota2/images/heroes/enchantress_icon.png' },
-            74: { name: 'Huskar', icon: 'https://api.opendota.com/apps/dota2/images/heroes/huskar_icon.png' },
-            75: { name: 'Night Stalker', icon: 'https://api.opendota.com/apps/dota2/images/heroes/night_stalker_icon.png' },
-            76: { name: 'Broodmother', icon: 'https://api.opendota.com/apps/dota2/images/heroes/broodmother_icon.png' },
-            77: { name: 'Batrider', icon: 'https://api.opendota.com/apps/dota2/images/heroes/batrider_icon.png' },
-            78: { name: 'Chen', icon: 'https://api.opendota.com/apps/dota2/images/heroes/chen_icon.png' },
-            79: { name: 'Spectre', icon: 'https://api.opendota.com/apps/dota2/images/heroes/spectre_icon.png' },
-            80: { name: 'Ancient Apparition', icon: 'https://api.opendota.com/apps/dota2/images/heroes/ancient_apparition_icon.png' },
-            81: { name: 'Doom', icon: 'https://api.opendota.com/apps/dota2/images/heroes/doom_bringer_icon.png' },
-            82: { name: 'Ursa', icon: 'https://api.opendota.com/apps/dota2/images/heroes/ursa_icon.png' },
-            83: { name: 'Spirit Breaker', icon: 'https://api.opendota.com/apps/dota2/images/heroes/spirit_breaker_icon.png' },
-            84: { name: 'Gyrocopter', icon: 'https://api.opendota.com/apps/dota2/images/heroes/gyrocopter_icon.png' },
-            85: { name: 'Alchemist', icon: 'https://api.opendota.com/apps/dota2/images/heroes/alchemist_icon.png' },
-            86: { name: 'Invoker', icon: 'https://api.opendota.com/apps/dota2/images/heroes/invoker_icon.png' },
-            87: { name: 'Silencer', icon: 'https://api.opendota.com/apps/dota2/images/heroes/silencer_icon.png' },
-            88: { name: 'Nature\'s Prophet', icon: 'https://api.opendota.com/apps/dota2/images/heroes/furion_icon.png' },
-            89: { name: 'Chen', icon: 'https://api.opendota.com/apps/dota2/images/heroes/chen_icon.png' },
-            90: { name: 'Meepo', icon: 'https://api.opendota.com/apps/dota2/images/heroes/meepo_icon.png' },
-            92: { name: 'Centaur Warrunner', icon: 'https://api.opendota.com/apps/dota2/images/heroes/centaur_icon.png' },
-            93: { name: 'Magnus', icon: 'https://api.opendota.com/apps/dota2/images/heroes/magnataur_icon.png' },
-            94: { name: 'Timbersaw', icon: 'https://api.opendota.com/apps/dota2/images/heroes/shredder_icon.png' },
-            95: { name: 'Bristleback', icon: 'https://api.opendota.com/apps/dota2/images/heroes/bristleback_icon.png' },
-            96: { name: 'Tusk', icon: 'https://api.opendota.com/apps/dota2/images/heroes/tusk_icon.png' },
-            97: { name: 'Skywrath Mage', icon: 'https://api.opendota.com/apps/dota2/images/heroes/skywrath_mage_icon.png' },
-            98: { name: 'Abaddon', icon: 'https://api.opendota.com/apps/dota2/images/heroes/abaddon_icon.png' },
-            99: { name: 'Elder Titan', icon: 'https://api.opendota.com/apps/dota2/images/heroes/elder_titan_icon.png' },
-            100: { name: 'Legion Commander', icon: 'https://api.opendota.com/apps/dota2/images/heroes/legion_commander_icon.png' },
-            101: { name: 'Techies', icon: 'https://api.opendota.com/apps/dota2/images/heroes/techies_icon.png' },
-            102: { name: 'Ember Spirit', icon: 'https://api.opendota.com/apps/dota2/images/heroes/ember_spirit_icon.png' },
-            103: { name: 'Earth Spirit', icon: 'https://api.opendota.com/apps/dota2/images/heroes/earth_spirit_icon.png' },
-            104: { name: 'Underlord', icon: 'https://api.opendota.com/apps/dota2/images/heroes/abyssal_underlord_icon.png' },
-            105: { name: 'Terrorblade', icon: 'https://api.opendota.com/apps/dota2/images/heroes/terrorblade_icon.png' },
-            106: { name: 'Phoenix', icon: 'https://api.opendota.com/apps/dota2/images/heroes/phoenix_icon.png' },
-            107: { name: 'Oracle', icon: 'https://api.opendota.com/apps/dota2/images/heroes/oracle_icon.png' },
-            108: { name: 'Winter Wyvern', icon: 'https://api.opendota.com/apps/dota2/images/heroes/winter_wyvern_icon.png' },
-            109: { name: 'Arc Warden', icon: 'https://api.opendota.com/apps/dota2/images/heroes/arc_warden_icon.png' },
-            110: { name: 'Monkey King', icon: 'https://api.opendota.com/apps/dota2/images/heroes/monkey_king_icon.png' },
-            111: { name: 'Dark Willow', icon: 'https://api.opendota.com/apps/dota2/images/heroes/dark_willow_icon.png' },
-            112: { name: 'Pangolier', icon: 'https://api.opendota.com/apps/dota2/images/heroes/pangolier_icon.png' },
-            113: { name: 'Grimstroke', icon: 'https://api.opendota.com/apps/dota2/images/heroes/grimstroke_icon.png' },
-            114: { name: 'Hoodwink', icon: 'https://api.opendota.com/apps/dota2/images/heroes/hoodwink_icon.png' },
-            119: { name: 'Void Spirit', icon: 'https://api.opendota.com/apps/dota2/images/heroes/void_spirit_icon.png' },
-            120: { name: 'Snapfire', icon: 'https://api.opendota.com/apps/dota2/images/heroes/snapfire_icon.png' },
-            121: { name: 'Mars', icon: 'https://api.opendota.com/apps/dota2/images/heroes/mars_icon.png' },
-            122: { name: 'Ringmaster', icon: 'https://api.opendota.com/apps/dota2/images/heroes/ringmaster_icon.png' },
-            126: { name: 'Primal Beast', icon: 'https://api.opendota.com/apps/dota2/images/heroes/primal_beast_icon.png' },
-            128: { name: 'Marci', icon: 'https://api.opendota.com/apps/dota2/images/heroes/marci_icon.png' },
-            129: { name: 'Ringmaster', icon: 'https://api.opendota.com/apps/dota2/images/heroes/ringmaster_icon.png' },
-            130: { name: 'Dawnbreaker', icon: 'https://api.opendota.com/apps/dota2/images/heroes/dawnbreaker_icon.png' },
-            131: { name: 'Marci', icon: 'https://api.opendota.com/apps/dota2/images/heroes/marci_icon.png' },
-            135: { name: 'Ringmaster', icon: 'https://api.opendota.com/apps/dota2/images/heroes/ringmaster_icon.png' }
-        };
-        
-        function getHero(heroId) {
-            return heroes[heroId] || { name: 'Unknown', icon: '' };
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById('view' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+            event.currentTarget.classList.add('active');
         }
+        
+        // Hydration tracking
+        let waterCount = parseInt(localStorage.getItem('dota_water') || '0');
+        updateWaterDisplay();
+        
+        function addWater(index) {
+            const glasses = document.querySelectorAll('.glass');
+            if (glasses[index].classList.contains('filled')) {
+                // Unfill
+                glasses[index].classList.remove('filled');
+                waterCount = index;
+            } else {
+                // Fill up to this glass
+                for (let i = 0; i <= index; i++) {
+                    glasses[i].classList.add('filled');
+                }
+                waterCount = index + 1;
+            }
+            localStorage.setItem('dota_water', waterCount);
+            updateWaterDisplay();
+        }
+        
+        function updateWaterDisplay() {
+            const glasses = document.querySelectorAll('.glass');
+            glasses.forEach((g, i) => {
+                g.classList.toggle('filled', i < waterCount);
+            });
+            document.getElementById('waterCount').textContent = waterCount;
+        }
+        
+        // Match tracking
+        let matchesToday = parseInt(localStorage.getItem('dota_matches_today') || '0');
+        let lastPlayedDate = localStorage.getItem('dota_last_played');
+        
+        // Reset if new day
+        if (lastPlayedDate !== new Date().toDateString()) {
+            matchesToday = 0;
+            localStorage.setItem('dota_matches_today', '0');
+            localStorage.setItem('dota_last_played', new Date().toDateString());
+        }
+        
+        document.getElementById('matchesToday').textContent = matchesToday;
+        document.getElementById('matchesProgress').style.width = Math.min(100, (matchesToday / 5) * 100) + '%';
+        
+        // API
+        const API_BASE = 'https://api.opendota.com/api';
         
         async function searchPlayer() {
             const input = document.getElementById('searchInput').value.trim();
             if (!input) return;
             
-            // Show loading
             document.getElementById('loading').classList.add('show');
             document.getElementById('profile').classList.remove('show');
             document.getElementById('error').classList.remove('show');
@@ -523,33 +688,29 @@
             try {
                 let accountId = input;
                 
-                // If input is not numeric, search by name
                 if (isNaN(input)) {
                     const searchRes = await fetch(`${API_BASE}/search?q=${encodeURIComponent(input)}`);
                     const searchData = await searchRes.json();
-                    
                     if (!searchData || searchData.length === 0) {
                         throw new Error('Player not found');
                     }
-                    
                     accountId = searchData[0].account_id;
                 }
                 
-                // Get player data
                 const playerRes = await fetch(`${API_BASE}/players/${accountId}`);
-                if (!playerRes.ok) throw new Error('Player not found');
-                
                 const playerData = await playerRes.json();
                 
-                // Get recent matches
-                const matchesRes = await fetch(`${API_BASE}/players/${accountId}/recentMatches`);
-                const matches = await matchesRes.json();
-                
-                // Get win/loss stats
                 const wlRes = await fetch(`${API_BASE}/players/${accountId}/wl`);
                 const wl = await wlRes.json();
                 
-                displayPlayer(playerData, matches, wl);
+                displayPlayer(playerData, wl);
+                
+                // Update lifestyle stats
+                const totalMatches = wl.win + wl.lose;
+                const wr = totalMatches > 0 ? Math.round((wl.win / totalMatches) * 100) : 0;
+                document.getElementById('gamesPlayed').textContent = totalMatches;
+                document.getElementById('winRate').textContent = wr + '%';
+                document.getElementById('playTime').textContent = Math.floor(totalMatches * 0.4) + 'h';
                 
             } catch (err) {
                 console.error(err);
@@ -559,73 +720,19 @@
             }
         }
         
-        function displayPlayer(player, matches, wl) {
-            // Player info
-            document.getElementById('playerName').textContent = player.profile?.personaname || 'Unknown Player';
-            document.getElementById('playerId').textContent = player.profile?.account_id || 'N/A';
+        function displayPlayer(player, wl) {
+            document.getElementById('playerName').textContent = player.profile?.personaname || 'Unknown';
+            document.getElementById('playerName2').textContent = player.profile?.personaname || 'Unknown';
             document.getElementById('avatar').src = player.profile?.avatarfull || '';
+            document.getElementById('mmr').textContent = 'MMR: ' + (player.computed_mmr || '--');
             
-            // Stats - handle private profiles
-            const wins = wl?.win || 0;
-            const losses = wl?.lose || 0;
-            const totalMatches = wins + losses;
+            document.getElementById('wins').textContent = wl?.win || 0;
+            document.getElementById('losses').textContent = wl?.lose || 0;
             
-            document.getElementById('wins').textContent = wins;
-            document.getElementById('losses').textContent = losses;
-            document.getElementById('matches').textContent = totalMatches;
-            
-            const winRate = totalMatches > 0 
-                ? Math.round((wins / totalMatches) * 100) 
-                : 0;
-            document.getElementById('winRate').textContent = winRate + '%';
-            
-            // Add MMR if available
-            if (player.computed_mmr) {
-                const statsGrid = document.querySelector('.stats-grid');
-                const mmrCard = document.createElement('div');
-                mmrCard.className = 'stat-card';
-                mmrCard.innerHTML = `
-                    <div class="stat-value" style="font-size: 1.5rem">${player.computed_mmr}</div>
-                    <div class="stat-label">MMR</div>
-                `;
-                statsGrid.insertBefore(mmrCard, statsGrid.firstChild);
-            }
-            
-            // Check if profile is private
-            const matchesList = document.getElementById('matchesList');
-            if (!matches || matches.length === 0) {
-                matchesList.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 1rem;">No public matches found. Profile may be private.</p>';
-            } else {
-                matchesList.innerHTML = '';
-                matches.slice(0, 5).forEach(match => {
-                const hero = getHero(match.hero_id);
-                const isWin = match.radiant_win === (match.player_slot < 128);
-                const duration = Math.floor(match.duration / 60) + ':' + String(match.duration % 60).padStart(2, '0');
-                const kda = `${match.kills}/${match.deaths}/${match.assists}`;
-                
-                const matchEl = document.createElement('div');
-                matchEl.className = 'match-card';
-                matchEl.innerHTML = `
-                    <div class="match-result ${isWin ? 'win' : 'loss'}">
-                        ${isWin ? 'WIN' : 'LOSS'}
-                    </div>
-                    <div class="match-info">
-                        <div class="match-hero">
-                            ${hero.icon ? `<img src="${hero.icon}" class="hero-icon" alt="${hero.name}">` : ''}
-                            ${hero.name}
-                        </div>
-                        <div class="match-kda">${kda}</div>
-                    </div>
-                    <div class="match-duration">${duration}</div>
-                `;
-                matchesList.appendChild(matchEl);
-            });
-            
-            // Show profile
             document.getElementById('profile').classList.add('show');
         }
         
-        // Search on Enter
+        // Enter key search
         document.getElementById('searchInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') searchPlayer();
         });
