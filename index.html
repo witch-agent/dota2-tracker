@@ -565,21 +565,39 @@
             document.getElementById('playerId').textContent = player.profile?.account_id || 'N/A';
             document.getElementById('avatar').src = player.profile?.avatarfull || '';
             
-            // Stats
-            document.getElementById('wins').textContent = wl?.win || 0;
-            document.getElementById('losses').textContent = wl?.lose || 0;
-            document.getElementById('matches').textContent = wl?.win + wl?.lose || 0;
+            // Stats - handle private profiles
+            const wins = wl?.win || 0;
+            const losses = wl?.lose || 0;
+            const totalMatches = wins + losses;
             
-            const winRate = wl?.win && wl?.lose 
-                ? Math.round((wl.win / (wl.win + wl.lose)) * 100) 
+            document.getElementById('wins').textContent = wins;
+            document.getElementById('losses').textContent = losses;
+            document.getElementById('matches').textContent = totalMatches;
+            
+            const winRate = totalMatches > 0 
+                ? Math.round((wins / totalMatches) * 100) 
                 : 0;
             document.getElementById('winRate').textContent = winRate + '%';
             
-            // Matches
-            const matchesList = document.getElementById('matchesList');
-            matchesList.innerHTML = '';
+            // Add MMR if available
+            if (player.computed_mmr) {
+                const statsGrid = document.querySelector('.stats-grid');
+                const mmrCard = document.createElement('div');
+                mmrCard.className = 'stat-card';
+                mmrCard.innerHTML = `
+                    <div class="stat-value" style="font-size: 1.5rem">${player.computed_mmr}</div>
+                    <div class="stat-label">MMR</div>
+                `;
+                statsGrid.insertBefore(mmrCard, statsGrid.firstChild);
+            }
             
-            (matches || []).slice(0, 5).forEach(match => {
+            // Check if profile is private
+            const matchesList = document.getElementById('matchesList');
+            if (!matches || matches.length === 0) {
+                matchesList.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 1rem;">No public matches found. Profile may be private.</p>';
+            } else {
+                matchesList.innerHTML = '';
+                matches.slice(0, 5).forEach(match => {
                 const hero = getHero(match.hero_id);
                 const isWin = match.radiant_win === (match.player_slot < 128);
                 const duration = Math.floor(match.duration / 60) + ':' + String(match.duration % 60).padStart(2, '0');
