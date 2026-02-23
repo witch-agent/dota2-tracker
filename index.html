@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dota 2 Tracker | Stats + Lifestyle</title>
+    <title>Dota 2 Tracker | Player Stats</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0D0D0D;
-            --surface: #1A1C1E;
-            --surface-hover: #242628;
-            --text: #FFFFFF;
-            --text-secondary: #888888;
-            --accent: #C8FF00;
-            --accent-dim: rgba(200, 255, 0, 0.15);
-            --border: rgba(255,255,255,0.08);
-            --success: #00FF88;
-            --danger: #FF3366;
-            --warning: #FFB000;
+            --bg: #0a0a0c;
+            --bg-secondary: #141418;
+            --bg-tertiary: #1c1c22;
+            --text: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --text-muted: #606060;
+            --accent: #ed2e42;
+            --accent-glow: rgba(237, 46, 66, 0.15);
+            --border: #2a2a32;
+            --success: #00ff88;
+            --danger: #ff3366;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,266 +29,93 @@
             color: var(--text);
             font-family: 'Inter', system-ui, sans-serif;
             min-height: 100vh;
-            line-height: 1.5;
-            padding-bottom: 80px;
+            line-height: 1.6;
         }
         
         .container {
-            max-width: 480px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 1.5rem;
+            padding: 2rem;
         }
         
         /* Header */
         header {
-            margin-bottom: 2rem;
+            text-align: center;
+            padding: 3rem 0;
         }
         
-        .date-line {
-            font-size: 0.7rem;
-            text-transform: uppercase;
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
             letter-spacing: 0.15em;
-            color: var(--text-secondary);
+            text-transform: uppercase;
             margin-bottom: 0.5rem;
         }
         
-        .greeting {
-            font-size: 1.75rem;
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3rem);
             font-weight: 700;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
         }
         
-        .player-name {
-            font-size: 0.9rem;
+        h1 span { color: var(--accent); }
+        
+        .subtitle {
             color: var(--text-secondary);
+            font-size: 1rem;
         }
         
-        /* Health Score Ring */
-        .score-card {
-            background: var(--surface);
+        /* Search */
+        .search-box {
+            background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: 16px;
             padding: 1.5rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-        
-        .score-ring {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: conic-gradient(var(--accent) 0deg, var(--accent) calc(var(--score) * 3.6deg), var(--surface-hover) calc(var(--score) * 3.6deg));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        
-        .score-ring::before {
-            content: '';
-            position: absolute;
-            width: 64px;
-            height: 64px;
-            background: var(--surface);
-            border-radius: 50%;
-        }
-        
-        .score-value {
-            position: relative;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-        
-        .score-info h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        
-        .score-info p {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-        
-        /* Vitals Row */
-        .vitals-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        
-        .vital-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 1rem;
-            text-align: center;
-        }
-        
-        .vital-icon {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .vital-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        
-        .vital-label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-secondary);
-        }
-        
-        /* Section Header */
-        .section-header {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--text);
-            margin: 1.5rem 0 1rem;
-        }
-        
-        /* Progress Card */
-        .progress-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 1.25rem;
-            margin-bottom: 0.75rem;
-        }
-        
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
-        
-        .progress-title {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        
-        .progress-value {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-        
-        .progress-track {
-            height: 8px;
-            background: var(--surface-hover);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: var(--accent);
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-        
-        /* Hydration */
-        .hydration-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 1.25rem;
-            margin-bottom: 0.75rem;
-        }
-        
-        .hydration-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .hydration-glasses {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .glass {
-            width: 32px;
-            height: 40px;
-            border: 2px solid var(--border);
-            border-radius: 4px 4px 8px 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .glass.filled {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-        
-        .glass:hover {
-            border-color: var(--accent);
-        }
-        
-        /* Add Button */
-        .add-btn {
-            width: 100%;
-            padding: 1rem;
-            background: var(--accent);
-            border: none;
-            border-radius: 14px;
-            color: var(--bg);
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-bottom: 0.75rem;
-        }
-        
-        .add-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px var(--accent-dim);
-        }
-        
-        /* Search Box */
-        .search-box {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
         }
         
         .search-input {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 1rem 1.25rem;
             background: var(--bg);
             border: 1px solid var(--border);
             border-radius: 10px;
             color: var(--text);
-            font-size: 0.9rem;
+            font-size: 1rem;
+            transition: all 0.2s;
         }
         
         .search-input:focus {
             outline: none;
             border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
         }
         
         .search-btn {
             width: 100%;
-            margin-top: 0.75rem;
-            padding: 0.75rem;
+            margin-top: 1rem;
+            padding: 1rem;
             background: var(--accent);
             border: none;
             border-radius: 10px;
-            color: var(--bg);
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--accent-glow);
+        }
+        
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         
         /* Player Profile */
@@ -298,79 +125,90 @@
         
         .player-profile.show {
             display: block;
+            animation: fadeIn 0.5s ease;
         }
         
-        .player-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 1.25rem;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .profile-header {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
         }
         
         .avatar {
-            width: 56px;
-            height: 56px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            border: 2px solid var(--accent);
+            border: 3px solid var(--accent);
+            object-fit: cover;
         }
         
         .player-info h2 {
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
         }
         
-        .player-info .mmr {
+        .player-id {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
-            color: var(--accent);
+            color: var(--text-muted);
         }
         
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-            margin-bottom: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
         
-        .stat-box {
-            background: var(--surface);
+        .stat-card {
+            background: var(--bg-secondary);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 1rem;
+            border-radius: 12px;
+            padding: 1.25rem;
             text-align: center;
         }
         
-        .stat-box .value {
-            font-size: 1.5rem;
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
             font-weight: 700;
+            color: var(--accent);
         }
         
-        .stat-box .label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+        .stat-label {
+            font-size: 0.85rem;
             color: var(--text-secondary);
+            margin-top: 0.25rem;
         }
         
-        .stat-box.wins .value { color: var(--success); }
-        .stat-box.losses .value { color: var(--danger); }
+        .stat-card.winrate .stat-value { color: var(--success); }
+        .stat-card.wins .stat-value { color: var(--success); }
+        .stat-card.losses .stat-value { color: var(--danger); }
         
         /* Loading */
         .loading {
             display: none;
             text-align: center;
-            padding: 2rem;
+            padding: 3rem;
         }
         
         .loading.show { display: block; }
         
         .spinner {
-            width: 32px;
-            height: 32px;
+            width: 40px;
+            height: 40px;
             border: 3px solid var(--border);
             border-top-color: var(--accent);
             border-radius: 50%;
@@ -378,364 +216,206 @@
             margin: 0 auto 1rem;
         }
         
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        /* Bottom Nav */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-around;
-            padding: 0.75rem 0;
-            z-index: 100;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.25rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.65rem;
-            cursor: pointer;
-        }
-        
-        .nav-item.active {
-            color: var(--accent);
-        }
-        
-        .nav-icon {
-            font-size: 1.25rem;
-        }
-        
-        /* Views */
-        .view { display: none; }
-        .view.active { display: block; }
         
         /* Error */
         .error {
             display: none;
-            background: rgba(255,51,102,0.1);
+            background: rgba(255, 51, 102, 0.1);
             border: 1px solid var(--danger);
-            border-radius: 14px;
-            padding: 1rem;
+            border-radius: 12px;
+            padding: 1.5rem;
             text-align: center;
             color: var(--danger);
             margin-bottom: 1rem;
         }
         
         .error.show { display: block; }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        @media (max-width: 600px) {
+            .container { padding: 1rem; }
+            .profile-header { flex-direction: column; text-align: center; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <header>
-            <div class="date-line" id="dateLine">MONDAY, FEB 22</div>
-            <h1 class="greeting">Good Evening</h1>
-            <p class="player-name" id="playerName">Search for your Steam profile</p>
+            <div class="logo">Dota 2 Tracker</div>
+            <h1>Find <span>Player</span> Stats</h1>
+            <p class="subtitle">Search by Steam ID or nickname</p>
         </header>
         
-        <!-- View: Lifestyle -->
-        <div class="view active" id="viewLifestyle">
-            <!-- Health Score -->
-            <div class="score-card">
-                <div class="score-ring" style="--score: 72">
-                    <span class="score-value" id="healthScore">72</span>
-                </div>
-                <div class="score-info">
-                    <h3>Player Score</h3>
-                    <p>Based on gaming habits</p>
-                </div>
-            </div>
-            
-            <!-- Vitals -->
-            <div class="vitals-row">
-                <div class="vital-card">
-                    <div class="vital-icon">🎮</div>
-                    <div class="vital-value" id="gamesPlayed">0</div>
-                    <div class="vital-label">Matches</div>
-                </div>
-                <div class="vital-card">
-                    <div class="vital-icon">⏱️</div>
-                    <div class="vital-value" id="playTime">0h</div>
-                    <div class="vital-label">Play Time</div>
-                </div>
-                <div class="vital-card">
-                    <div class="vital-icon">🎯</div>
-                    <div class="vital-value" id="winRate">0%</div>
-                    <div class="vital-label">Win Rate</div>
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="Enter Steam ID or nickname...">
+            <button class="search-btn" id="searchBtn">Search Player</button>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Searching player...</p>
+        </div>
+        
+        <div class="error" id="error">
+            <p>Player not found or API unavailable. Please try again later.</p>
+        </div>
+        
+        <div class="player-profile" id="profile">
+            <div class="profile-header">
+                <img src="" alt="Avatar" class="avatar" id="avatar">
+                <div class="player-info">
+                    <h2 id="playerName">Player Name</h2>
+                    <p class="player-id">ID: <span id="playerId">12345678</span></p>
                 </div>
             </div>
             
-            <div class="section-header">GAMING METRICS</div>
-            
-            <!-- Match Progress -->
-            <div class="progress-card">
-                <div class="progress-header">
-                    <span class="progress-title">Daily Matches Goal</span>
-                    <span class="progress-value"><span id="matchesToday">0</span>/5</span>
+            <div class="stats-grid">
+                <div class="stat-card wins">
+                    <div class="stat-value" id="wins">0</div>
+                    <div class="stat-label">Wins</div>
                 </div>
-                <div class="progress-track">
-                    <div class="progress-fill" id="matchesProgress" style="width: 0%"></div>
+                <div class="stat-card losses">
+                    <div class="stat-value" id="losses">0</div>
+                    <div class="stat-label">Losses</div>
                 </div>
-            </div>
-            
-            <!-- Break Reminder -->
-            <div class="progress-card">
-                <div class="progress-header">
-                    <span class="progress-title">Break Timer</span>
-                    <span class="progress-value" id="breakTime">45m</span>
+                <div class="stat-card winrate">
+                    <div class="stat-value" id="winRate">0%</div>
+                    <div class="stat-label">Win Rate</div>
                 </div>
-                <div class="progress-track">
-                    <div class="progress-fill" id="breakProgress" style="width: 75%"></div>
-                </div>
-            </div>
-            
-            <div class="section-header">WELLNESS</div>
-            
-            <!-- Hydration -->
-            <div class="hydration-card">
-                <div class="hydration-header">
-                    <span class="progress-title">💧 Hydration</span>
-                    <span class="progress-value"><span id="waterCount">0</span>/8</span>
-                </div>
-                <div class="hydration-glasses" id="waterGlasses">
-                    <div class="glass" onclick="addWater(0)"></div>
-                    <div class="glass" onclick="addWater(1)"></div>
-                    <div class="glass" onclick="addWater(2)"></div>
-                    <div class="glass" onclick="addWater(3)"></div>
-                    <div class="glass" onclick="addWater(4)"></div>
-                    <div class="glass" onclick="addWater(5)"></div>
-                    <div class="glass" onclick="addWater(6)"></div>
-                    <div class="glass" onclick="addWater(7)"></div>
-                </div>
-            </div>
-            
-            <!-- Sleep -->
-            <div class="progress-card">
-                <div class="progress-header">
-                    <span class="progress-title">😴 Sleep Goal</span>
-                    <span class="progress-value">6/8h</span>
-                </div>
-                <div class="progress-track">
-                    <div class="progress-fill" style="width: 75%"></div>
+                <div class="stat-card">
+                    <div class="stat-value" id="matches">0</div>
+                    <div class="stat-label">Total Matches</div>
                 </div>
             </div>
         </div>
         
-        <!-- View: Player Search -->
-        <div class="view" id="viewPlayer">
-            <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="Enter Steam ID or nickname...">
-                <button class="search-btn" onclick="searchPlayer()">Search</button>
-            </div>
-            
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p>Searching...</p>
-            </div>
-            
-            <div class="error" id="error">Player not found</div>
-            
-            <div class="player-profile" id="profile">
-                <div class="player-card">
-                    <img src="" alt="Avatar" class="avatar" id="avatar">
-                    <div class="player-info">
-                        <h2 id="playerName2">Player</h2>
-                        <span class="mmr" id="mmr">MMR: --</span>
-                    </div>
-                </div>
-                
-                <div class="stats-grid">
-                    <div class="stat-box wins">
-                        <div class="value" id="wins">0</div>
-                        <div class="label">Wins</div>
-                    </div>
-                    <div class="stat-box losses">
-                        <div class="value" id="losses">0</div>
-                        <div class="label">Losses</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- View: Heroes -->
-        <div class="view" id="viewHeroes">
-            <div class="section-header">HERO MASTERY</div>
-            <div class="progress-card">
-                <div class="progress-header">
-                    <span class="progress-title">🎯 Top Heroes</span>
-                    <span class="progress-value">Coming soon</span>
-                </div>
-                <p style="color: var(--text-secondary); font-size: 0.85rem;">Track your most played heroes and win rates</p>
-            </div>
-        </div>
-        
-        <!-- View: Settings -->
-        <div class="view" id="viewSettings">
-            <div class="section-header">SETTINGS</div>
-            <div class="progress-card">
-                <div class="progress-header">
-                    <span class="progress-title">Daily Match Goal</span>
-                    <span class="progress-value">5</span>
-                </div>
-            </div>
-            <div class="progress-card">
-                <div class="progress-header">
-                    <span class="progress-title">Break Reminder</span>
-                    <span class="progress-value">45 min</span>
-                </div>
-            </div>
-        </div>
+        <footer>
+            Data from <a href="https://www.opendota.com" target="_blank">OpenDota API</a>
+        </footer>
     </div>
-    
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('lifestyle')">
-            <span class="nav-icon">🏠</span>
-            <span>Lifestyle</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('player')">
-            <span class="nav-icon">🔍</span>
-            <span>Player</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('heroes')">
-            <span class="nav-icon">⚔️</span>
-            <span>Heroes</span>
-        </div>
-        <div class="nav-item" onclick="switchTab('settings')">
-            <span class="nav-icon">⚙️</span>
-            <span>Settings</span>
-        </div>
-    </nav>
 
     <script>
-        // Set date
-        const now = new Date();
-        const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
-        const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-        document.getElementById('dateLine').textContent = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate();
-        
-        // Tab switching
-        function switchTab(tab) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
-            document.getElementById('view' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-        
-        // Hydration tracking
-        let waterCount = parseInt(localStorage.getItem('dota_water') || '0');
-        updateWaterDisplay();
-        
-        function addWater(index) {
-            const glasses = document.querySelectorAll('.glass');
-            if (glasses[index].classList.contains('filled')) {
-                // Unfill
-                glasses[index].classList.remove('filled');
-                waterCount = index;
-            } else {
-                // Fill up to this glass
-                for (let i = 0; i <= index; i++) {
-                    glasses[i].classList.add('filled');
-                }
-                waterCount = index + 1;
-            }
-            localStorage.setItem('dota_water', waterCount);
-            updateWaterDisplay();
-        }
-        
-        function updateWaterDisplay() {
-            const glasses = document.querySelectorAll('.glass');
-            glasses.forEach((g, i) => {
-                g.classList.toggle('filled', i < waterCount);
-            });
-            document.getElementById('waterCount').textContent = waterCount;
-        }
-        
-        // Match tracking
-        let matchesToday = parseInt(localStorage.getItem('dota_matches_today') || '0');
-        let lastPlayedDate = localStorage.getItem('dota_last_played');
-        
-        // Reset if new day
-        if (lastPlayedDate !== new Date().toDateString()) {
-            matchesToday = 0;
-            localStorage.setItem('dota_matches_today', '0');
-            localStorage.setItem('dota_last_played', new Date().toDateString());
-        }
-        
-        document.getElementById('matchesToday').textContent = matchesToday;
-        document.getElementById('matchesProgress').style.width = Math.min(100, (matchesToday / 5) * 100) + '%';
-        
-        // API
         const API_BASE = 'https://api.opendota.com/api';
         
+        // DOM Elements
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const profile = document.getElementById('profile');
+        
+        // Search player
         async function searchPlayer() {
-            const input = document.getElementById('searchInput').value.trim();
-            if (!input) return;
+            const input = searchInput.value.trim();
+            if (!input) {
+                alert('Please enter a player ID or nickname!');
+                return;
+            }
             
-            document.getElementById('loading').classList.add('show');
-            document.getElementById('profile').classList.remove('show');
-            document.getElementById('error').classList.remove('show');
+            // Show loading, hide others
+            loading.classList.add('show');
+            error.classList.remove('show');
+            profile.classList.remove('show');
+            searchBtn.disabled = true;
+            searchBtn.textContent = 'Searching...';
             
             try {
                 let accountId = input;
                 
+                // If not numeric, search by name
                 if (isNaN(input)) {
-                    const searchRes = await fetch(`${API_BASE}/search?q=${encodeURIComponent(input)}`);
+                    console.log('Searching for:', input);
+                    const searchRes = await fetch(`${API_BASE}/search?q=${encodeURIComponent(input)}`, {
+                        signal: AbortSignal.timeout(10000)
+                    });
+                    
+                    if (!searchRes.ok) throw new Error('Search failed');
+                    
                     const searchData = await searchRes.json();
+                    console.log('Search results:', searchData);
+                    
                     if (!searchData || searchData.length === 0) {
                         throw new Error('Player not found');
                     }
+                    
                     accountId = searchData[0].account_id;
+                    console.log('Found account ID:', accountId);
                 }
                 
-                const playerRes = await fetch(`${API_BASE}/players/${accountId}`);
-                const playerData = await playerRes.json();
+                // Get player data
+                const playerRes = await fetch(`${API_BASE}/players/${accountId}`, {
+                    signal: AbortSignal.timeout(10000)
+                });
                 
-                const wlRes = await fetch(`${API_BASE}/players/${accountId}/wl`);
+                if (!playerRes.ok) throw new Error('Player not found');
+                
+                const playerData = await playerRes.json();
+                console.log('Player data:', playerData);
+                
+                // Get win/loss stats
+                const wlRes = await fetch(`${API_BASE}/players/${accountId}/wl`, {
+                    signal: AbortSignal.timeout(10000)
+                });
+                
                 const wl = await wlRes.json();
+                console.log('W/L:', wl);
                 
                 displayPlayer(playerData, wl);
                 
-                // Update lifestyle stats
-                const totalMatches = wl.win + wl.lose;
-                const wr = totalMatches > 0 ? Math.round((wl.win / totalMatches) * 100) : 0;
-                document.getElementById('gamesPlayed').textContent = totalMatches;
-                document.getElementById('winRate').textContent = wr + '%';
-                document.getElementById('playTime').textContent = Math.floor(totalMatches * 0.4) + 'h';
-                
             } catch (err) {
-                console.error(err);
-                document.getElementById('error').classList.add('show');
+                console.error('Error:', err);
+                error.classList.add('show');
             } finally {
-                document.getElementById('loading').classList.remove('show');
+                loading.classList.remove('show');
+                searchBtn.disabled = false;
+                searchBtn.textContent = 'Search Player';
             }
         }
         
         function displayPlayer(player, wl) {
-            document.getElementById('playerName').textContent = player.profile?.personaname || 'Unknown';
-            document.getElementById('playerName2').textContent = player.profile?.personaname || 'Unknown';
+            // Player info
+            document.getElementById('playerName').textContent = player.profile?.personaname || 'Unknown Player';
+            document.getElementById('playerId').textContent = player.profile?.account_id || 'N/A';
             document.getElementById('avatar').src = player.profile?.avatarfull || '';
-            document.getElementById('mmr').textContent = 'MMR: ' + (player.computed_mmr || '--');
             
-            document.getElementById('wins').textContent = wl?.win || 0;
-            document.getElementById('losses').textContent = wl?.lose || 0;
+            // Stats
+            const wins = wl?.win || 0;
+            const losses = wl?.lose || 0;
+            const total = wins + losses;
+            const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
             
-            document.getElementById('profile').classList.add('show');
+            document.getElementById('wins').textContent = wins;
+            document.getElementById('losses').textContent = losses;
+            document.getElementById('matches').textContent = total;
+            document.getElementById('winRate').textContent = winRate + '%';
+            
+            // Show profile
+            profile.classList.add('show');
         }
         
-        // Enter key search
-        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+        // Event listeners
+        searchBtn.addEventListener('click', searchPlayer);
+        
+        searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') searchPlayer();
         });
+        
+        console.log('Dota 2 Tracker loaded');
     </script>
 </body>
 </html>
